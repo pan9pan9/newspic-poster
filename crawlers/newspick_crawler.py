@@ -17,7 +17,6 @@ class NewspickCrawler:
 
     async def fetch_articles(self, limit: int = 20):
         async with async_playwright() as p:
-            print("🌐 브라우저 실행")
             logger.info("🌐 브라우저 실행")
             browser = await p.chromium.launch(headless=True)
 
@@ -28,28 +27,24 @@ class NewspickCrawler:
             page.on("dialog", lambda dialog: dialog.accept())
 
             # 로그인
-            print("🔑 로그인 시도")
             logger.info("🔑 로그인 시도")
             await page.goto("https://partners.newspic.kr/main/index")
             await page.fill(LoginPageLocators.ID_INPUT, self.user_id)
             await page.fill(LoginPageLocators.PASSWORD_INPUT, self.password)
             await page.click(LoginPageLocators.LOGIN_BUTTON)
             await page.wait_for_timeout(3000)
-            print(f"✅ 로그인 완료, 현재 URL: {page.url}")
             logger.info(f"✅ 로그인 완료, 현재 URL: {page.url}")
 
             # 이미지 로딩
             try:
                 await page.wait_for_selector(ArticlePageLocators.IMAGE, timeout=10000)
             except:
-                print("⚠️ 이미지 요소를 찾을 수 없음")
                 logger.warning("⚠️ 이미지 요소를 찾을 수 없음")
                 await browser.close()
                 return []
 
             # 이미지 목록
             img_elements = await page.locator(ArticlePageLocators.IMAGE).all()
-            print(f"🔍 이미지 요소 개수: {len(img_elements)}")
             logger.info(f"🔍 이미지 요소 개수: {len(img_elements)}")
             img_src_list = await page.locator(ArticlePageLocators.IMAGE).evaluate_all(
                 "imgs => imgs.map(img => img.src)"
@@ -58,7 +53,6 @@ class NewspickCrawler:
 
             # 제목 목록
             title_elements = await page.locator(ArticlePageLocators.TITLE).all_inner_texts()
-            print(f"🔍 제목 요소 개수: {len(title_elements)}")
             logger.info(f"🔍 제목 요소 개수: {len(title_elements)}")
             title_list = [
                 t.replace(" …", "").replace("'", " ").replace('"', " ")
@@ -68,7 +62,6 @@ class NewspickCrawler:
             # 버튼 목록
             buttons = await page.locator(ArticlePageLocators.COPY_BUTTON).all()
             thumbs = await page.locator(ArticlePageLocators.THUMB).all()
-            print(f"🔍 버튼 요소 개수: {len(buttons)}")
             logger.info(f"🔍 버튼 요소 개수: {len(buttons)}")
 
             links = []
@@ -95,7 +88,6 @@ class NewspickCrawler:
                 logger.info(f"🔗 {idx+1}번째 링크 수집: {copied_link}")
 
             await browser.close()
-            print("🌐 브라우저 종료")
             logger.info("🌐 브라우저 종료")
 
         return [

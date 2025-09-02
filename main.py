@@ -14,7 +14,7 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 # 1️⃣ 환경변수가 없으면 .env 로드 (로컬용)
-if not all(os.getenv(var) for var in ["NESPICK_ID", "NESPICK_PW", "ACCESS_TOKEN", "THREADUSER_ID"]):
+if not all(os.getenv(var) for var in ["NEWSPICK_ID", "NEWSPICK_PW", "ACCESS_TOKEN", "THREADUSER_ID"]):
     try:
         from dotenv import load_dotenv
         load_dotenv()
@@ -23,13 +23,13 @@ if not all(os.getenv(var) for var in ["NESPICK_ID", "NESPICK_PW", "ACCESS_TOKEN"
         logger.warning("⚠️ python-dotenv 미설치, .env 파일 로드 불가")
 
 # 2️⃣ 환경변수 가져오기
-NESPICK_ID = os.getenv("NESPICK_ID")
-NESPICK_PW = os.getenv("NESPICK_PW")
+NEWSPICK_ID = os.getenv("NEWSPICK_ID")
+NEWSPICK_PW = os.getenv("NEWSPICK_PW")
 ACCESS_TOKEN = os.getenv("ACCESS_TOKEN")
 THREADUSER_ID = os.getenv("THREADUSER_ID")
 
 # 3️⃣ 객체 생성
-crawler = NewspickCrawler(user_id=NESPICK_ID, password=NESPICK_PW)
+crawler = NewspickCrawler(user_id=NEWSPICK_ID, password=NEWSPICK_PW)
 threads_api = ThreadsAPI(access_token=ACCESS_TOKEN, user_id=THREADUSER_ID)
 
 logger.info("🚀 Workflow 시작")
