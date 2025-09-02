@@ -28,8 +28,8 @@ jobs:
 
       - name: Run crawler
         env:
-          NESPICK_ID: ${{ secrets.NESPICK_ID }}
-          NESPICK_PW: ${{ secrets.NESPICK_PW }}
+          NEWSPICK_ID: ${{ secrets.NESPICK_ID }}
+          NEWSPICK_PW: ${{ secrets.NESPICK_PW }}
           ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
           THREADUSER_ID: ${{ secrets.THREADUSER_ID }}
         run: python main.py

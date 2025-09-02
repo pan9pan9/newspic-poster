@@ -13,6 +13,12 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
+# 2️⃣ 환경변수 가져오기
+NEWSPICK_ID = os.getenv("NEWSPICK_ID")
+NEWSPICK_PW = os.getenv("NEWSPICK_PW")
+ACCESS_TOKEN = os.getenv("ACCESS_TOKEN")
+THREADUSER_ID = os.getenv("THREADUSER_ID")
+
 # 1️⃣ 환경변수가 없으면 .env 로드 (로컬용)
 if not all(os.getenv(var) for var in ["NEWSPICK_ID", "NEWSPICK_PW", "ACCESS_TOKEN", "THREADUSER_ID"]):
     try:
@@ -22,11 +28,7 @@ if not all(os.getenv(var) for var in ["NEWSPICK_ID", "NEWSPICK_PW", "ACCESS_TOKE
     except ImportError:
         logger.warning("⚠️ python-dotenv 미설치, .env 파일 로드 불가")
 
-# 2️⃣ 환경변수 가져오기
-NEWSPICK_ID = os.getenv("NEWSPICK_ID")
-NEWSPICK_PW = os.getenv("NEWSPICK_PW")
-ACCESS_TOKEN = os.getenv("ACCESS_TOKEN")
-THREADUSER_ID = os.getenv("THREADUSER_ID")
+
 
 # 3️⃣ 객체 생성
 crawler = NewspickCrawler(user_id=NEWSPICK_ID, password=NEWSPICK_PW)
