@@ -10,7 +10,7 @@ class NewspickCrawler:
 
     async def fetch_articles(self, limit: int = 20):
         async with async_playwright() as p:
-            browser = await p.chromium.launch(headless=False) 
+            browser = await p.chromium.launch(headless= True) 
 
             # 클립보드 권한 설정
             context = await browser.new_context(

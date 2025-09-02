@@ -43,11 +43,28 @@ async def run_workflow(crawler, threads_api, limit=20):
         thread_ids.append(post_id)
 
     print("📝 기사 링크 댓글 달기 시작")
+
     # 2️⃣ 댓글 달기 (링크)
     for idx, article in enumerate(articles[:limit]):
         if idx >= len(thread_ids):
             print(f"⚠️ 게시물이 생성되지 않아 댓글 생략: {article['title']}")
             continue
 
-        reply_response = threads_api.reply_to_post(thread_ids[idx], article["link"])
-        print(f"💬 댓글 달기 응답: {reply_response}")
+        # 1️⃣ 댓글 컨테이너 생성
+        reply_container = threads_api.create_media(
+            media_type="TEXT",
+            text=article["link"],
+            reply_to_id=thread_ids[idx]
+        )
+        container_id = reply_container.get("id")
+        if not container_id:
+            print(f"⚠️ 댓글 컨테이너 생성 실패: {reply_container}")
+            continue
+
+        # 2️⃣ 댓글 발행
+        publish_reply = threads_api.publish_media(container_id)
+        reply_id = publish_reply.get("id")
+        if reply_id:
+            print(f"💬 댓글 발행 완료: {reply_id}")
+        else:
+            print(f"⚠️ 댓글 발행 실패: {article['title']}")

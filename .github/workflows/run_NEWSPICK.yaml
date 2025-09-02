@@ -1,0 +1,35 @@
+name: Run Newspick Crawler
+
+on:
+  schedule:
+    - cron: '0 9 * * *' # 매일 오전 9시 실행
+  workflow_dispatch: # 수동 실행 가능
+
+jobs:
+  run-crawler:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Install Playwright browsers
+        run: playwright install
+
+      - name: Run crawler
+        env:
+          NESPICK_ID: ${{ secrets.NESPICK_ID }}
+          NESPICK_PW: ${{ secrets.NESPICK_PW }}
+          ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+          THREADUSER_ID: ${{ secrets.THREADUSER_ID }}
+        run: python main.py
