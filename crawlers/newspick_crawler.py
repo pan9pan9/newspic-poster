@@ -18,7 +18,7 @@ class NewspickCrawler:
     async def fetch_articles(self, limit: int = 20):
         async with async_playwright() as p:
             logger.info("🌐 브라우저 실행")
-            browser = await p.chromium.launch(headless=True)
+            browser = await p.chromium.launch(headless=False)
 
             context = await browser.new_context(
                 permissions=["clipboard-read", "clipboard-write"]
@@ -35,13 +35,6 @@ class NewspickCrawler:
             await page.wait_for_timeout(3000)
             logger.info(f"✅ 로그인 완료, 현재 URL: {page.url}")
 
-            # 이미지 로딩
-            try:
-                await page.wait_for_selector(ArticlePageLocators.IMAGE, timeout=10000)
-            except:
-                logger.warning("⚠️ 이미지 요소를 찾을 수 없음")
-                await browser.close()
-                return []
 
             # 이미지 목록
             img_elements = await page.locator(ArticlePageLocators.IMAGE).all()
