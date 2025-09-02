@@ -77,8 +77,7 @@ class NewspickCrawler:
                     })()
                 """)
                 links.append(copied_link)
-                print(f"🔗 {idx+1}번째 링크 수집: {copied_link}")
-                logger.info(f"🔗 {idx+1}번째 링크 수집: {copied_link}")
+                logger.info(f"🔗 {idx+1}번째 링크 수집")
 
             await browser.close()
             logger.info("🌐 브라우저 종료")
