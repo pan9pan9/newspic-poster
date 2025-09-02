@@ -1,6 +1,6 @@
 import asyncio
 from playwright.async_api import async_playwright
-from locators import LoginPageLocators, ArticlePageLocators
+from crawlers.locators import LoginPageLocators, ArticlePageLocators
 
 
 class NewspickCrawler:
@@ -10,21 +10,22 @@ class NewspickCrawler:
 
     async def fetch_articles(self, limit: int = 20):
         async with async_playwright() as p:
-            browser = await p.chromium.launch(headless=False)
-            context = await browser.new_context()
-            page = await context.new_page()
-            page.on("dialog", lambda dialog: dialog.accept())
-            
+            browser = await p.chromium.launch(headless=False) 
+
+            # 클립보드 권한 설정
             context = await browser.new_context(
                 permissions=["clipboard-read", "clipboard-write"]
             )
             
+            page = await context.new_page()
+            page.on("dialog", lambda dialog: dialog.accept())
+
             # 로그인
             await page.goto("https://partners.newspic.kr/main/index")
             await page.fill(LoginPageLocators.ID_INPUT, self.user_id)
             await page.fill(LoginPageLocators.PASSWORD_INPUT, self.password)
             await page.click(LoginPageLocators.LOGIN_BUTTON)
-            await asyncio.sleep(3)
+            await asyncio.sleep(1)
             
             # 이미지 목록
             img_src_list = await page.locator(ArticlePageLocators.IMAGE).evaluate_all(
