@@ -19,7 +19,7 @@ async def run_workflow(crawler, threads_api, limit=20):
 
     # 1️⃣ 이미지 + 제목 업로드
     for idx, article in enumerate(articles[:limit]):
-        logger.info(f"📤 {idx+1}번째 기사 업로드 중: {article['title']}")
+        logger.info(f"📤 {idx+1}번째 기사 업로드 중")
 
         media_response = threads_api.create_media(
             media_type="IMAGE",
