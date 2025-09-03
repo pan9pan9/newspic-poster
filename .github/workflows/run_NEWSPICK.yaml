@@ -2,7 +2,7 @@ name: Run Newspick Crawler
 
 on:
   schedule:
-    - cron: '0 9 * * *' # 매일 오전 9시 실행
+    - cron: '0 9 * * *' # 매일 오후 6시 실행
   workflow_dispatch: # 수동 실행 가능
 
 jobs:
